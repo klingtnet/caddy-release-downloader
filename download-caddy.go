@@ -44,7 +44,13 @@ func download(u string, filename string, wg *sync.WaitGroup, errCh chan<- error)
 }
 
 func main() {
-	ver := "0.9.3"
+	if len(os.Args) < 2 {
+		binName := os.Args[0]
+		fmt.Printf("Usage: %s <VERSION>\nExample: %s 0.9.3\n", binName, binName)
+		os.Exit(1)
+	}
+
+	ver := os.Args[1]
 	archs := []string{"386", "amd64", "arm"}
 	rootURL := "https://caddyserver.com/download/build"
 	features := []string{"awslambda", "cors", "filemanager", "git", "hugo", "ipfilter", "jwt", "locale", "mailout", "minify", "multipass", "prometheus", "ratelimit", "realip", "search", "upload", "cloudflare", "digitalocean", "dnsimple", "dyn", "gandi", "googlecloud", "namecheap", "rfc2136", "route53", "vultr"}
