@@ -1,0 +1,14 @@
+language: go
+
+go:
+  - 1.7
+
+before_deploy: "go run caddy-downloader.go ${TRAVIS_TAG}"
+
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file: "caddy-all-plugins-${TRAVIS_TAG}-*.tar.gz"
+  skip_cleanup: true
+  on:
+    tags: true
