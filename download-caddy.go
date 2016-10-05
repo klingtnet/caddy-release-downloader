@@ -25,6 +25,9 @@ func download(u string, filename string, wg *sync.WaitGroup, errCh chan<- error)
 	defer file.Close()
 
 	resp, err := http.Get(u)
+	if resp.StatusCode != 200 {
+		errCh <- fmt.Errorf("Download '%s' failed: %d", u, resp.StatusCode)
+	}
 	if err != nil {
 		errCh <- err
 	}
