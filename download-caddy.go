@@ -20,6 +20,10 @@ func download(u string, filename string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	file, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0644)
+	if err != nil && os.IsExist(err) {
+		fmt.Println(filename, "already downloaded, skipping ...")
+		return
+	}
 	errExit(err)
 	defer file.Close()
 
