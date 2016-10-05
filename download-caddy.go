@@ -50,6 +50,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	failed := false
 	ver := os.Args[1]
 	archs := []string{"386", "amd64", "arm"}
 	rootURL := "https://caddyserver.com/download/build"
@@ -77,8 +78,13 @@ func main() {
 	go func() {
 		for {
 			err := <-errCh
+			failed = true
 			fmt.Fprintln(os.Stderr, err)
 		}
 	}()
 	wg.Wait()
+
+	if failed {
+		os.Exit(2)
+	}
 }
