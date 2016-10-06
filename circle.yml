@@ -1,8 +1,9 @@
+---
 deployment:
   release:
     tag: /[0-9]+(\.[0-9]+)*/
     owner: klingtnet 
-		commands:
-			-	go get github.com/tcnksm/ghr
-			- go run download-caddy.go -- $CIRCLE_TAG
-			- ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME caddy-all-plugins-${CIRCLE_TAG}-*.tar.gz
+    commands:
+      - go get github.com/tcnksm/ghr
+      - go run download-caddy.go -- $CIRCLE_TAG
+      - ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME caddy-all-plugins-${CIRCLE_TAG}-*.tar.gz
