@@ -6,16 +6,17 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 	"strings"
 	"sync"
 )
 
-func download(u string, filename string, wg *sync.WaitGroup, errCh chan<- error) {
+func download(u string, filepath string, wg *sync.WaitGroup, errCh chan<- error) {
 	defer wg.Done()
 
-	file, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0644)
+	file, err := os.OpenFile(filepath, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0644)
 	if err != nil && os.IsExist(err) {
-		fmt.Println(filename, "already downloaded, skipping ...")
+		fmt.Println(filepath, "already downloaded, skipping ...")
 		return
 	}
 	if err != nil {
@@ -37,6 +38,7 @@ func download(u string, filename string, wg *sync.WaitGroup, errCh chan<- error)
 
 	defer resp.Body.Close()
 
+	fmt.Println("Saving to", filepath)
 	_, err = io.Copy(file, resp.Body)
 	if err != nil {
 		errCh <- err
@@ -63,6 +65,13 @@ func main() {
 	defer close(errCh)
 	for _, arch := range archs {
 		filename := fmt.Sprintf("caddy-all-plugins-%s-%s.tar.gz", ver, arch)
+		wd, err := os.Getwd()
+		if err != nil {
+			errCh <- err
+			continue
+		}
+		filepath := path.Join(wd, filename)
+
 		queryString := fmt.Sprintf("os=linux&arch=%s&features=%s", arch, featureList)
 		rawURL := fmt.Sprintf("%s?%s", rootURL, queryString)
 		u, err := url.Parse(rawURL)
@@ -73,7 +82,7 @@ func main() {
 
 		wg.Add(1)
 		fmt.Println("Starting download for caddy", arch)
-		go download(u.String(), filename, &wg, errCh)
+		go download(u.String(), filepath, &wg, errCh)
 	}
 	go func() {
 		for {
