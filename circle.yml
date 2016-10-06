@@ -6,6 +6,7 @@ deployment:
     commands:
       - go get github.com/aktau/github-release
       - go run download-caddy.go $CIRCLE_TAG
-      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name caddy-all-plugins-$CIRCLE_TAG --file caddy-all-plugins-${CIRCLE_TAG}-amd64.tar.gz
-      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name caddy-all-plugins-$CIRCLE_TAG --file caddy-all-plugins-${CIRCLE_TAG}-386.tar.gz
-      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name caddy-all-plugins-$CIRCLE_TAG --file caddy-all-plugins-${CIRCLE_TAG}-arm.tar.gz
+      - github-release release --user klingtnet --repo caddy-release-downloader --tag $CIRCLE_TAG --name $CIRCLE_TAG
+      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name caddy-all-plugins-${CIRCLE_TAG}-amd64.tar.gz --file caddy-all-plugins-${CIRCLE_TAG}-amd64.tar.gz
+      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name caddy-all-plugins-${CIRCLE_TAG}-386.tar.gz --file caddy-all-plugins-${CIRCLE_TAG}-386.tar.gz
+      - github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $CIRCLE_TAG --name caddy-all-plugins-${CIRCLE_TAG}-arm.tar.gz --file caddy-all-plugins-${CIRCLE_TAG}-arm.tar.gz
