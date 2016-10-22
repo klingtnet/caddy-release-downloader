@@ -1,7 +1,7 @@
 ---
 deployment:
   release:
-    tag: /[0-9]+(\.[0-9]+)*/
+    tag: /[0-9]+(\.[0-9]+){2}(-[0-9]+)/
     owner: klingtnet 
     commands:
       - go get github.com/aktau/github-release
