@@ -54,40 +54,39 @@ func main() {
 
 	failed := false
 	ver := os.Args[1]
-	archs := []string{"386", "amd64", "arm", "arm6"}
-	rootURL := "https://caddyserver.com/download/build"
-	features := []string{"awslambda",
-		"cors",
-		"expires",
-		"filemanager",
-		"filter",
-		"git",
-		"hugo",
-		"ipfilter",
-		"jsonp",
-		"jwt",
-		"locale",
-		"mailout",
-		"minify",
-		"multipass",
-		"prometheus",
-		"ratelimit",
-		"realip",
-		"search",
-		"upload",
-		"DNS",
-		"cloudflare",
-		"digitalocean",
-		"dnsimple",
-		"dyn",
-		"gandi",
-		"googlecloud",
-		"linode",
-		"namecheap",
-		"ovh",
-		"rfc2136",
-		"route53",
-		"vultr"}
+	archs := []string{"386", "amd64", "arm7", "arm6"}
+	rootURL := "https://caddyserver.com/download/linux"
+	features := []string{"http.awslambda",
+		"http.cgi",
+		"http.cors",
+		"http.expires",
+		"http.filemanager",
+		"http.filter",
+		"http.git",
+		"http.hugo",
+		"http.ipfilter",
+		"http.jwt",
+		"http.mailout",
+		"http.minify",
+		"http.ratelimit",
+		"http.realip",
+		"http.upload",
+		"net",
+		"dns",
+		"tls.dns.cloudflare",
+		"tls.dns.digitalocean",
+		"tls.dns.dnsimple",
+		"tls.dns.dnspod",
+		"tls.dns.dyn",
+		"tls.dns.exoscale",
+		"tls.dns.gandi",
+		"tls.dns.googlecloud",
+		"tls.dns.linode",
+		"tls.dns.namecheap",
+		"tls.dns.ovh",
+		"tls.dns.rfc2136",
+		"tls.dns.route53",
+		"tls.dns.vultr"}
 
 	featureList := url.QueryEscape(strings.Join(features, ","))
 
@@ -103,11 +102,8 @@ func main() {
 		}
 		filepath := path.Join(wd, filename)
 
-		queryString := fmt.Sprintf("os=linux&arch=%s&features=%s", arch, featureList)
-		if arch == "arm6" {
-			queryString = fmt.Sprintf("os=linux&arch=%s&arm=%d&features=%s", "arm", 6, featureList)
-		}
-		rawURL := fmt.Sprintf("%s?%s", rootURL, queryString)
+		queryString := fmt.Sprintf("plugins=%s", featureList)
+		rawURL := fmt.Sprintf("%s/%s?%s", rootURL, arch, queryString)
 		u, err := url.Parse(rawURL)
 		if err != nil {
 			errCh <- err
