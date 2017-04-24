@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -45,6 +46,35 @@ func download(u string, filepath string, wg *sync.WaitGroup, errCh chan<- error)
 	}
 }
 
+type Plugin struct {
+	Name string `json:"Name"`
+}
+
+type DownloadMetadata struct {
+	Plugins []Plugin `json:"plugins"`
+}
+
+func getFeatures() []string {
+	featureURL := "https://caddyserver.com/api/download-page"
+	res, err := http.Get(featureURL)
+	if err != nil {
+		panic(err)
+	}
+	defer res.Body.Close()
+
+	decoder := json.NewDecoder(res.Body)
+	var data DownloadMetadata
+	err = decoder.Decode(&data)
+	if err != nil {
+		panic(err)
+	}
+	plugins := make([]string, len(data.Plugins))
+	for i, v := range data.Plugins {
+		plugins[i] = v.Name
+	}
+	return plugins
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		binName := os.Args[0]
@@ -56,38 +86,7 @@ func main() {
 	ver := os.Args[1]
 	archs := []string{"386", "amd64", "arm7", "arm6"}
 	rootURL := "https://caddyserver.com/download/linux"
-	features := []string{"http.awslambda",
-		"http.cgi",
-		"http.cors",
-		"http.expires",
-		"http.filemanager",
-		"http.filter",
-		"http.git",
-		"http.hugo",
-		"http.ipfilter",
-		"http.jwt",
-		"http.mailout",
-		"http.minify",
-		"http.ratelimit",
-		"http.realip",
-		"http.upload",
-		"net",
-		"dns",
-		"tls.dns.cloudflare",
-		"tls.dns.digitalocean",
-		"tls.dns.dnsimple",
-		"tls.dns.dnspod",
-		"tls.dns.dyn",
-		"tls.dns.exoscale",
-		"tls.dns.gandi",
-		"tls.dns.googlecloud",
-		"tls.dns.linode",
-		"tls.dns.namecheap",
-		"tls.dns.ovh",
-		"tls.dns.rfc2136",
-		"tls.dns.route53",
-		"tls.dns.vultr"}
-
+	features := getFeatures()
 	featureList := url.QueryEscape(strings.Join(features, ","))
 
 	var wg sync.WaitGroup
