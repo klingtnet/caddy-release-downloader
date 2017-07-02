@@ -75,6 +75,18 @@ func getFeatures() []string {
 	return plugins
 }
 
+func filterFeatures(features []string) []string {
+	filtered := make([]string, 0)
+	for _, feature := range features {
+		switch feature {
+		case "hook.pluginloader", "hook.service":
+			continue
+		}
+		filtered = append(filtered, feature)
+	}
+	return filtered
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		binName := os.Args[0]
@@ -86,7 +98,7 @@ func main() {
 	ver := os.Args[1]
 	archs := []string{"386", "amd64", "arm7", "arm6"}
 	rootURL := "https://caddyserver.com/download/linux"
-	features := getFeatures()
+	features := filterFeatures(getFeatures())
 	featureList := url.QueryEscape(strings.Join(features, ","))
 
 	var wg sync.WaitGroup
