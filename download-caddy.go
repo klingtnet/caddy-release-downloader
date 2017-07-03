@@ -79,7 +79,7 @@ func filterFeatures(features []string) []string {
 	filtered := make([]string, 0)
 	for _, feature := range features {
 		switch feature {
-		case "hook.pluginloader", "hook.service":
+		case "hook.pluginloader", "hook.service", "http.grpc":
 			continue
 		}
 		filtered = append(filtered, feature)
