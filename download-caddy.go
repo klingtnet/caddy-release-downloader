@@ -116,7 +116,7 @@ func main() {
 		}
 		filepath := path.Join(wd, filename)
 
-		queryString := fmt.Sprintf("plugins=%s", featureList)
+		queryString := fmt.Sprintf("license=personal&plugins=%s", featureList)
 		rawURL := fmt.Sprintf("%s/%s?%s", rootURL, arch, queryString)
 		u, err := url.Parse(rawURL)
 		if err != nil {
