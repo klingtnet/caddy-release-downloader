@@ -82,6 +82,9 @@ func filterFeatures(features []string) []string {
 		case "hook.pluginloader", "hook.service", "http.grpc":
 			continue
 		}
+		if strings.Contains(feature, "dns") {
+			continue
+		}
 		filtered = append(filtered, feature)
 	}
 	return filtered
