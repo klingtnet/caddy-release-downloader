@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/klingtnet/caddy-release-downloader.svg?style=svg)](https://circleci.com/gh/klingtnet/caddy-release-downloader)
+[![Build Status](https://travis-ci.org/klingtnet/caddy-release-downloader.svg?branch=master)](https://travis-ci.org/klingtnet/caddy-release-downloader)
 
 # caddy release downloader
 
